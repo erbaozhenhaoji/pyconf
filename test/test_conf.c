@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 
 	confdata_delete(confdata);
 
-	confdata = confdata_load("./myconf.ini");
+	confdata = confdata_load_fullpath("./myconf.ini");
 	assert(confdata);
 
 	ret = confdata_getitem(confdata, "name", value, sizeof(value));

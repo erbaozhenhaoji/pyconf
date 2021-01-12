@@ -72,7 +72,7 @@ CONFDATA* confdata_load(const char* path, const char* file);
  * ret  : NULL, error
  *      : else pointer to CONFDATA struct
  */
-CONFDATA* confdata_load(const char* fullpath);
+CONFDATA* confdata_load_fullpath(const char* fullpath);
 
 /*
  * func : free a confdata struct

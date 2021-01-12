@@ -93,7 +93,7 @@ CONFDATA* confdata_load(const char* path, const char* file)
 	char fullpath[256];
 	cmps_path(fullpath, sizeof(fullpath)-1, path, file);
 
-	return confdata_load(fullpath);
+	return confdata_load_fullpath(fullpath);
 }
 
 
@@ -105,7 +105,7 @@ CONFDATA* confdata_load(const char* path, const char* file)
  * ret  : NULL, error
  *      : else pointer to CONFDATA struct
  */
-CONFDATA* confdata_load(const char* fullpath)
+CONFDATA* confdata_load_fullpath(const char* fullpath)
 {
 	int       max_confnum  = 0;
 	FILE*     fp           = NULL;
@@ -182,8 +182,9 @@ void  confdata_free(CONFDATA* confdata)
  */
 int confdata_save(CONFDATA* confdata, const char* path, const char* file)
 {
-	FILE* fp = NULL;
-	char fullpath[256];
+	FILE* fp  = NULL;
+	int   i   = 0;
+	char  fullpath[256];
 	
 	if(!confdata){
 		return -1;
@@ -196,7 +197,7 @@ int confdata_save(CONFDATA* confdata, const char* path, const char* file)
 	
 	int       conf_num   = confdata->conf_num;
 	CONFITEM* conf_array = confdata->conf_array;
-	for(int i=0;i<conf_num;i++){
+	for(i=0;i<conf_num;i++){
 		if(conf_array[i].key[0] == '\0'){
 			continue;
 		}
@@ -274,6 +275,7 @@ int confdata_additem(CONFDATA* confdata, const char* key, const char* val)
 int confdata_getitem(CONFDATA* confdata, const char* key, char* val, const int valsize)
 {
 	int conf_num = 0;
+	int i        = 0;
 	CONFITEM* conf_array = NULL;
 
 	if(!confdata){
@@ -282,7 +284,7 @@ int confdata_getitem(CONFDATA* confdata, const char* key, char* val, const int v
 	conf_array = confdata->conf_array;
 	conf_num   = confdata->conf_num;
 
-	for(int i=0;i<conf_num;i++){
+	for(i=0;i<conf_num;i++){
 		if(strcmp(conf_array[i].key, key)==0){
 			strncpy(val, conf_array[i].val, valsize);
 			val[valsize-1] = '\0';
@@ -308,12 +310,13 @@ int confdata_getitem(CONFDATA* confdata, const char* key, char* val, const int v
 int confdata_delitem(CONFDATA* confdata, const char* key)
 {
 	int conf_num = 0;
+	int i        = 0;
 	CONFITEM* conf_array = NULL;
 
 	conf_array = confdata->conf_array;
 	conf_num   = confdata->conf_num;
 
-	for(int i=0;i<conf_num;i++){
+	for(i=0;i<conf_num;i++){
 		if(strcmp(conf_array[i].key, key)==0){
 			conf_array[i].key[0] = '\0';
 			return 1;
